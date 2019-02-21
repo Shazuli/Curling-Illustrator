@@ -6,6 +6,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import main.Simon.java.Main;
+import main.Simon.java.Main_abstract;
 
 public class Arrow {
     private double[] x;
@@ -53,6 +54,12 @@ public class Arrow {
         gc.stroke();
         gc.closePath();
         canvas.toBack();
+        Main_abstract.updateDepth();
+
+        canvas.setOnMouseClicked(event -> {
+            canvas.toBack();
+            Main_abstract.updateDepth();
+        });
 
         this.canvas = canvas;
 

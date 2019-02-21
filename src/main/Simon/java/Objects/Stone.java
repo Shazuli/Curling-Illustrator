@@ -10,6 +10,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
 import main.Simon.java.Main;
+import main.Simon.java.Main_abstract;
 
 public class Stone {
     private Color color;
@@ -62,6 +63,7 @@ public class Stone {
                     //System.out.println("Pressed");
                     circle.setOpacity(0.7);
                     circle.toFront();
+                    Main_abstract.updateDepth();
                 }
                 if (event.isSecondaryButtonDown()) {
                     menu.show(circle,event.getScreenX(),event.getScreenY());

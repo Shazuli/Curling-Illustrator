@@ -25,10 +25,11 @@ public class Team {
 
     public void addStone(Stone stone) {
         //this.scenarios.set(Main.scenarioIndex,stone);
+        stone.setColor(this.color);
         this.scenarios.get(Main.scenarioIndex).add(stone);
     }
 
-    public void newScenarios() {
+    public void newScenario() {
         this.scenarios.add(new ArrayList<>());
     }
 }

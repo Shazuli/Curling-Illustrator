@@ -1,6 +1,7 @@
 package main.Simon.java;
 
 import javafx.application.Application;
+import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.CheckMenuItem;
@@ -8,12 +9,24 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import main.Simon.java.Objects.Arrow;
 import main.Simon.java.Objects.Stone;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Main_abstract {
+    private static List<Node> viewList = new ArrayList<>();
+    private static List<Node> top = new ArrayList<>();
+
+    private boolean btnsVisible = true;
+
+
+    private Pane GUI;
+
     public Main_abstract(Stage stage) {
         /*Target canvas.*/
         Canvas c = new Canvas(Main.width,Main.height);
@@ -21,31 +34,34 @@ public class Main_abstract {
         //c.setTranslateY(-Main.height*0.5);
         GraphicsContext gc = c.getGraphicsContext2D();
 
-
+        /*Target.*/
         drawCircle(gc,Main.width*0.5-250,Main.height*0.5-250,500,Color.RED);
         drawCircle(gc,Main.width*0.5-175,Main.height*0.5-175,350,Color.WHITE);
         drawCircle(gc,Main.width*0.5-100,Main.height*0.5-100,200,Color.BLUE);
         gc.setFill(Color.BLACK);
         gc.strokeLine(Main.width*0.5,0,Main.width*0.5,Main.height);
-        gc.strokeLine(0,Main.height*0.5,Main.width,Main.height*0.5);
+        gc.strokeLine(0,Main.height*0.5+Main.yOffset,Main.width,Main.height*0.5+Main.yOffset);
         drawCircle(gc,Main.width*0.5-35,Main.height*0.5-35,70,Color.WHITE);
 
         Main.target = c;
         Main.layout.getChildren().add(Main.target);
+        viewList.add(Main.target);
 
 
-        Stone stone = new Stone();
-        stone.setColor(Color.RED);
-        Main.layout.getChildren().add(stone.draw(100,0));
-        Stone stoneY = new Stone();
-        stoneY.setColor(Color.YELLOW);
-        Main.layout.getChildren().add(stoneY.draw(-100,0));
 
-        //Arrow arrow = new Arrow(new double[]{0,-10,100,150},new double[]{20,-5,80,85});
-        //Main.layout.getChildren().add(arrow.draw(0,0));
 
-        /*Menu.*/
-        MenuBar menu = new MenuBar();
+        //Main.layout.getChildren().add(pane);
+
+        /*GUI*/
+        GUI = new GUI().newGUI();
+        GUI.setVisible(btnsVisible);
+        //GUI.setStyle("-fx-background-color: black;");
+
+        viewList.add(GUI);
+        Main.layout.getChildren().add(GUI);
+
+        /*Menu Bar.*/
+        MenuBar menuBar = new MenuBar();
         Menu file = new Menu("File");
         MenuItem fileQuit = new Menu("Quit");
         fileQuit.setGraphic(new ImageView("file:src/main/Simon/resources/quit.png"));
@@ -60,17 +76,65 @@ public class Main_abstract {
         });
         viewDist.setSelected(Main.showLines);
         view.getItems().add(viewDist);
+        CheckMenuItem viewBtns = new CheckMenuItem("Buttons");
+        viewBtns.setOnAction(event -> {
+            btnsVisible = !btnsVisible;
+            GUI.setVisible(btnsVisible);
+        });
+        viewBtns.setSelected(btnsVisible);
+        view.getItems().add(viewBtns);
+
         Menu about = new Menu("About");
-        menu.getMenus().add(file);
-        menu.getMenus().add(view);
-        menu.getMenus().add(about);
-        menu.setTranslateY(-Main.height*0.5+10);
-        Main.layout.getChildren().add(menu);
+        menuBar.getMenus().add(file);
+        menuBar.getMenus().add(view);
+        menuBar.getMenus().add(about);
+        menuBar.setTranslateY(-Main.height*0.5+10);
+        menuBar.setOpacity(0.3);
+
+        menuBar.setOnMouseExited(event -> {
+            menuBar.setOpacity(0.3);
+        });
+        menuBar.setOnMouseEntered(event -> {
+            menuBar.setOpacity(1);
+        });
+
+        top.add(menuBar);
+        Main.layout.getChildren().add(menuBar);
+
+
+
+        //viewList.add(gui);
+
+
+        Stone stone = new Stone();
+        stone.setColor(Color.RED);
+        Main.layout.getChildren().add(stone.draw(100,0));
+        Stone stoneY = new Stone();
+        stoneY.setColor(Color.YELLOW);
+        Main.layout.getChildren().add(stoneY.draw(-100,0));
+
+        //Arrow arrow = new Arrow(new double[]{0,-10,100,150},new double[]{20,-5,80,85});
+        //Main.layout.getChildren().add(arrow.draw(0,0));
+
+
+
+
+
+
+
+
+        //updateDepth();
 
 
     }
     private void drawCircle(GraphicsContext graphicsContext,double x, double y, double radius, Color c) {
         graphicsContext.setFill(c);
-        graphicsContext.fillOval(x,y,radius,radius);
+        graphicsContext.fillOval(x,y+Main.yOffset,radius,radius);
+    }
+    public static void updateDepth() {
+        for (int i=viewList.size()-1;i>=0;i--)
+            viewList.get(i).toBack();
+        for (Node i:top)
+            i.toFront();
     }
 }

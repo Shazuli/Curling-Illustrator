@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 public class Main extends Application {
 
     public static final int width=900,height=700;
+    public static final double yOffset = 30;
 
     public static StackPane layout;
 
