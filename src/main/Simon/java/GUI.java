@@ -5,7 +5,10 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import main.Simon.java.Objects.Scenario;
 import main.Simon.java.Objects.Stone;
+
+import static main.Simon.java.Main_abstract.getCurrentScenario;
 
 public class GUI {
     public Pane newGUI() {
@@ -22,7 +25,8 @@ public class GUI {
             stone.setColor(Color.RED);
             //Main.layout.getChildren().add(stone.draw(0,0));
             //Main_abstract.currentSCENARIO.getPane().getChildren().add(stone.draw(0,0));
-            Main_abstract.currentSCENARIO.addStone(Main_abstract.currentSCENARIO.getTeam1());
+            //Main_abstract.currentSCENARIO.addStone(Main_abstract.currentSCENARIO.getTeam1());
+            getCurrentScenario().addStone(getCurrentScenario().getTeam1());
         });
 
         Button newTeam2Stone = new Button("New Yellow");
@@ -33,7 +37,8 @@ public class GUI {
             Stone stone = new Stone();
             stone.setColor(Color.YELLOW);
             //Main.layout.getChildren().add(stone.draw(0,0));
-            Main_abstract.currentSCENARIO.addStone(Main_abstract.currentSCENARIO.getTeam2());
+            //Main_abstract.currentSCENARIO.addStone(Main_abstract.currentSCENARIO.getTeam2());
+            getCurrentScenario().addStone(getCurrentScenario().getTeam2());
         });
 
         addNode(pane,newTeam1Stone);
@@ -41,6 +46,7 @@ public class GUI {
 
         return pane;
     }
+    //private Scenario getCurrentScenario() { return Main_abstract.SCENARIOS.get(Main_abstract.currentSCENARIOIndex); }
     private void addNode(Pane pane,Node node) {
         pane.getChildren().add(node);
     }

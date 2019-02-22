@@ -1,6 +1,7 @@
 package main.Simon.java.Objects;
 
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseDragEvent;
@@ -8,9 +9,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
 import main.Simon.java.Main;
 import main.Simon.java.Main_abstract;
+
+import static main.Simon.java.Main_abstract.getCurrentScenario;
 
 public class Stone {
     private Color color;
@@ -26,7 +28,8 @@ public class Stone {
         MenuItem delete = new MenuItem("Delete");
         delete.setOnAction(event -> {
             //Main.layout.getChildren().remove(this.circle);
-            Main_abstract.currentSCENARIO.getPane().getChildren().remove(this.circle);
+            //Main_abstract.currentSCENARIO.getPane().getChildren().remove(this.circle);
+            getCurrentScenario().getPane().getChildren().remove(this.circle);
         });
         this.menu.getItems().add(delete);
     }
@@ -37,7 +40,7 @@ public class Stone {
     public String getTeam(){ return this.team; }
     public double getCenterX() { return this.circle.getCenterX(); }
     public double getCenterY() { return this.circle.getCenterY(); }
-    //public Canvas getCanvas(){ return this.canvas; }
+    public double getRadius() { return this.circle.getRadius(); }
 
 
     public Circle draw(double xOffset, double yOffset) {
@@ -59,7 +62,8 @@ public class Stone {
             @Override
             public void handle(MouseEvent event) {
                 if (event.isPrimaryButtonDown()) {
-                    circle.setMouseTransparent(true);
+                    //circle.setMouseTransparent(true);
+                    Main.layout.setCursor(Cursor.NONE);
                     event.setDragDetect(true);
                     //System.out.println("Pressed");
                     circle.setOpacity(0.7);
@@ -74,9 +78,11 @@ public class Stone {
         circle.setOnMouseReleased(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                circle.setMouseTransparent(false);
+                //circle.setMouseTransparent(false);
+                Main.layout.setCursor(Cursor.DEFAULT);
                 event.setDragDetect(false);
                 circle.setOpacity(1);
+
                 //System.out.println("Released");
             }
         });

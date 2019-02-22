@@ -1,6 +1,6 @@
 package main.Simon.java;
 
-import javafx.application.Application;
+import javafx.animation.FadeTransition;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,23 +12,23 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import main.Simon.java.Objects.Arrow;
 import main.Simon.java.Objects.Scenario;
-import main.Simon.java.Objects.Stone;
 import main.Simon.java.Objects.Team;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main_abstract {
-    private static List<Node> viewList = new ArrayList<>();
+    //private static List<Node> viewList = new ArrayList<>();
     private static List<Node> top = new ArrayList<>();
 
-    private boolean btnsVisible = true;
+    private boolean GUIVisible = true;
 
 
-    private List<Scenario> SCENARIOS = new ArrayList<>();
-    public static Scenario currentSCENARIO;
+    public static List<Scenario> SCENARIOS = new ArrayList<>();
+    public static int currentSCENARIOIndex = 0;
     private Pane GUI;
 
     public Main_abstract(Stage stage) {
@@ -49,7 +49,7 @@ public class Main_abstract {
 
         Main.target = c;
         Main.layout.getChildren().add(Main.target);
-        viewList.add(Main.target);
+        //viewList.add(Main.target);
 
 
 
@@ -58,11 +58,11 @@ public class Main_abstract {
 
         /*GUI*/
         GUI = new GUI().newGUI();
-        GUI.setVisible(btnsVisible);
+        GUI.setVisible(GUIVisible);
         top.add(GUI);
         //GUI.setStyle("-fx-background-color: black;");
 
-        viewList.add(GUI);
+        //viewList.add(GUI);
         Main.layout.getChildren().add(GUI);
 
         /*Menu Bar.*/
@@ -81,13 +81,13 @@ public class Main_abstract {
         });
         viewDist.setSelected(Main.showLines);
         view.getItems().add(viewDist);
-        CheckMenuItem viewBtns = new CheckMenuItem("Buttons");
-        viewBtns.setOnAction(event -> {
-            btnsVisible = !btnsVisible;
-            GUI.setVisible(btnsVisible);
+            CheckMenuItem viewGUI = new CheckMenuItem("GUI");
+        viewGUI.setOnAction(event -> {
+            GUIVisible = !GUIVisible;
+            GUI.setVisible(GUIVisible);
         });
-        viewBtns.setSelected(btnsVisible);
-        view.getItems().add(viewBtns);
+        viewGUI.setSelected(GUIVisible);
+        view.getItems().add(viewGUI);
 
         Menu about = new Menu("About");
         menuBar.getMenus().add(file);
@@ -97,7 +97,10 @@ public class Main_abstract {
         menuBar.setOpacity(0.3);
 
         menuBar.setOnMouseExited(event -> {
-            menuBar.setOpacity(0.3);
+            FadeTransition ft = new FadeTransition(Duration.millis(1000),menuBar);
+            ft.setFromValue(1);
+            ft.setToValue(0.3);
+            ft.play();
         });
         menuBar.setOnMouseEntered(event -> {
             menuBar.setOpacity(1);
@@ -107,15 +110,14 @@ public class Main_abstract {
         Main.layout.getChildren().add(menuBar);
 
 
-        currentSCENARIO = new Scenario();
+        Scenario newScenario = new Scenario();
 
         Team teamRed = new Team("Team Red",Color.RED);
         Team teamYellow = new Team("Team Yellow",Color.YELLOW);
-        currentSCENARIO.setTeam1(teamRed);
-        currentSCENARIO.setTeam2(teamYellow);
-        //currentSCENARIO.addStone(teamRed);
+        newScenario.setTeam1(teamRed);
+        newScenario.setTeam2(teamYellow);
 
-        SCENARIOS.add(currentSCENARIO);
+        SCENARIOS.add(newScenario);
 
         //viewList.add(gui);
 
@@ -147,9 +149,10 @@ public class Main_abstract {
         graphicsContext.fillOval(x,y+Main.yOffset,radius,radius);
     }
     public static void updateDepth() {
-        for (int i=viewList.size()-1;i>=0;i--)
-            viewList.get(i).toBack();
+        /*for (int i=viewList.size()-1;i>=0;i--)
+            viewList.get(i).toBack();*/
         for (Node i:top)
             i.toFront();
     }
+    public static Scenario getCurrentScenario() { return SCENARIOS.get(currentSCENARIOIndex); }
 }

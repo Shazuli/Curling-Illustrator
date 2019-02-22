@@ -9,6 +9,7 @@ import java.util.List;
 public class Team {
     private String name;
     private Color color;
+    private int points;
     //private List<List<Stone>> scenarios;
 
     public Team(String name, Color color) {
