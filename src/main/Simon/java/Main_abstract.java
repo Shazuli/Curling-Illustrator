@@ -13,7 +13,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import main.Simon.java.Objects.Arrow;
+import main.Simon.java.Objects.Scenario;
 import main.Simon.java.Objects.Stone;
+import main.Simon.java.Objects.Team;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +27,8 @@ public class Main_abstract {
     private boolean btnsVisible = true;
 
 
+    private List<Scenario> SCENARIOS = new ArrayList<>();
+    public static Scenario currentSCENARIO;
     private Pane GUI;
 
     public Main_abstract(Stage stage) {
@@ -55,6 +59,7 @@ public class Main_abstract {
         /*GUI*/
         GUI = new GUI().newGUI();
         GUI.setVisible(btnsVisible);
+        top.add(GUI);
         //GUI.setStyle("-fx-background-color: black;");
 
         viewList.add(GUI);
@@ -102,16 +107,25 @@ public class Main_abstract {
         Main.layout.getChildren().add(menuBar);
 
 
+        currentSCENARIO = new Scenario();
+
+        Team teamRed = new Team("Team Red",Color.RED);
+        Team teamYellow = new Team("Team Yellow",Color.YELLOW);
+        currentSCENARIO.setTeam1(teamRed);
+        currentSCENARIO.setTeam2(teamYellow);
+        //currentSCENARIO.addStone(teamRed);
+
+        SCENARIOS.add(currentSCENARIO);
 
         //viewList.add(gui);
 
 
-        Stone stone = new Stone();
+        /*Stone stone = new Stone();
         stone.setColor(Color.RED);
         Main.layout.getChildren().add(stone.draw(100,0));
         Stone stoneY = new Stone();
         stoneY.setColor(Color.YELLOW);
-        Main.layout.getChildren().add(stoneY.draw(-100,0));
+        Main.layout.getChildren().add(stoneY.draw(-100,0));*/
 
         //Arrow arrow = new Arrow(new double[]{0,-10,100,150},new double[]{20,-5,80,85});
         //Main.layout.getChildren().add(arrow.draw(0,0));
@@ -123,7 +137,8 @@ public class Main_abstract {
 
 
 
-        //updateDepth();
+
+        updateDepth();
 
 
     }

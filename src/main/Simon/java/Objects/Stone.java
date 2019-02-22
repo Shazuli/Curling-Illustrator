@@ -25,7 +25,8 @@ public class Stone {
         this.menu = new ContextMenu();
         MenuItem delete = new MenuItem("Delete");
         delete.setOnAction(event -> {
-            System.out.println(this.getColor());
+            //Main.layout.getChildren().remove(this.circle);
+            Main_abstract.currentSCENARIO.getPane().getChildren().remove(this.circle);
         });
         this.menu.getItems().add(delete);
     }
