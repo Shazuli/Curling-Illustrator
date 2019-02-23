@@ -5,6 +5,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.LineTo;
@@ -14,6 +16,8 @@ import javafx.scene.shape.PathElement;
 import main.Simon.java.Main;
 import main.Simon.java.Main_abstract;
 
+import static main.Simon.java.Main_abstract.getCurrentScenario;
+
 public class Arrow {
     private double[] x;
     private double[] y;
@@ -21,10 +25,19 @@ public class Arrow {
     private double width = 3;
     private Canvas canvas;
     private Path arrow;
+    private ContextMenu menu;
     private Color color = Color.BLACK;
     public Arrow(double[] x,double[] y) {
         this.x = x;
         this.y = y;
+        this.menu = new ContextMenu();
+        MenuItem delete = new MenuItem("Delete");
+        delete.setOnAction(event -> {
+            //Main.layout.getChildren().remove(this.circle);
+            //Main_abstract.currentSCENARIO.getPane().getChildren().remove(this.circle);
+            getCurrentScenario().getPane().getChildren().remove(this.arrow);
+        });
+        this.menu.getItems().add(delete);
     }
 
     public void setLenght(double lenght) { this.lenght = lenght; }
@@ -35,7 +48,7 @@ public class Arrow {
     public double getWidth() { return this.width; }
     public Color getColor() { return this.color; }
 
-    public Path draw(double xOffset,double yOffset) {
+    public Path draw(/*double xOffset,double yOffset*/) {
         double angle = Math.atan2(this.y[this.y.length-1]-this.y[this.y.length-2],this.x[this.x.length-1]-this.x[this.x.length-2]);
         //double XOF = arrMin(this.x);
         //double YOF = arrMin(this.y);
@@ -56,8 +69,10 @@ public class Arrow {
         MoveTo moveTo2 = new MoveTo(tox,toy);
         LineTo lineTo2 = new LineTo(tox-this.lenght*Math.cos(angle+Math.PI/6),toy-this.lenght*Math.sin(angle+Math.PI/6));
         arrow.getElements().addAll(moveTo1,lineTo1,moveTo2,lineTo2);
-        arrow.setTranslateX(xOffset);
-        arrow.setTranslateY(yOffset);
+        //arrow.setTranslateX(xOffset);
+        //arrow.setTranslateY(yOffset);
+        //arrow.setTranslateX(arrMin(this.x));
+        //arrow.setTranslateY(arrMin(this.y));
 
 
         arrow.setOnMousePressed(new EventHandler<MouseEvent>() {
@@ -65,11 +80,12 @@ public class Arrow {
             public void handle(MouseEvent event) {
                 if (event.isPrimaryButtonDown()) {
                     //circle.setMouseTransparent(true);
-                    Main.layout.setCursor(Cursor.NONE);
                     event.setDragDetect(true);
                     //System.out.println("Pressed");
                     arrow.toFront();
-                    Main_abstract.updateDepth();
+                }
+                if (event.isSecondaryButtonDown()) {
+                    menu.show(arrow,event.getScreenX(),event.getScreenY());
                 }
 
             }
@@ -78,9 +94,7 @@ public class Arrow {
             @Override
             public void handle(MouseEvent event) {
                 //circle.setMouseTransparent(false);
-                Main.layout.setCursor(Cursor.DEFAULT);
                 event.setDragDetect(false);
-
                 //System.out.println("Released");
             }
         });
@@ -89,8 +103,8 @@ public class Arrow {
             public void handle(MouseEvent event) {
                 if (event.isPrimaryButtonDown()) {
                     event.setDragDetect(false);
-                    arrow.setTranslateX(arrow.getTranslateX() + event.getX());
-                    arrow.setTranslateY(arrow.getTranslateY() + event.getY());
+                    arrow.setTranslateX(-x[x.length-1] + (arrow.getTranslateX() + event.getX()));
+                    arrow.setTranslateY(-y[y.length-1] + (arrow.getTranslateY() + event.getY()));
                 }
 
             }
@@ -102,39 +116,8 @@ public class Arrow {
 
             }
         });
-        /*Canvas canvas = new Canvas(XOF*-1+arrMax(this.x)+this.lenght,YOF*-1+arrMax(this.y)+this.lenght);
-        canvas.setTranslateX(xOffset);
-        canvas.setTranslateY(yOffset);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setStroke(this.color);
-        gc.setLineWidth(this.width);
-        gc.beginPath();
-        for (int i=0;i<this.x.length-1;i++) {
-            gc.moveTo(XOF*-1+this.x[i],YOF*-1+this.y[i]);
-            gc.lineTo(XOF*-1+this.x[i+1],YOF*-1+this.y[i+1]);
-            gc.stroke();
-        }
-        double tox = XOF*-1+this.x[this.x.length-1];
-        double toy = YOF*-1+this.y[this.y.length-1];
-        gc.moveTo(tox,toy);
-        gc.lineTo(tox-this.lenght*Math.cos(angle-Math.PI/6),toy-this.lenght*Math.sin(angle-Math.PI/6));
-        gc.stroke();
-        gc.moveTo(tox,toy);
-        gc.lineTo(tox-this.lenght*Math.cos(angle+Math.PI/6),toy-this.lenght*Math.sin(angle+Math.PI/6));
-        gc.stroke();
-        gc.closePath();
-        canvas.toBack();*/
-        /*Main_abstract.updateDepth();
-
-
-        canvas.setOnMouseClicked(event -> {
-            canvas.toBack();
-            Main_abstract.updateDepth();
-        });*/
 
         this.arrow = arrow;
-
-
         return arrow;
     }
     private double arrMin(double[] numbers) {

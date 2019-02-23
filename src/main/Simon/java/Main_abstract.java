@@ -117,6 +117,10 @@ public class Main_abstract {
         newScenario.setTeam1(teamRed);
         newScenario.setTeam2(teamYellow);
 
+        //Arrow arrow = new Arrow(new double[]{0,-10,100,150},new double[]{20,-5,80,85});
+
+        //newScenario.addArrow(arrow);
+
         SCENARIOS.add(newScenario);
 
         //viewList.add(gui);
