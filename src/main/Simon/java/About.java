@@ -8,7 +8,6 @@ import javafx.stage.Stage;
 
 public class About {
     public static void display() {
-        System.out.println("fff");
         Stage window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle("About");
