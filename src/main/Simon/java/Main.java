@@ -11,6 +11,7 @@ public class Main extends Application {
 
     public static final int width=900,height=800;
     public static final double yOffset = 90;
+    public static final String version = "0.4";
 
     public static StackPane layout;
 

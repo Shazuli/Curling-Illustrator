@@ -1,6 +1,7 @@
 package main.Simon.java;
 
 import javafx.animation.FadeTransition;
+import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -16,6 +17,7 @@ import javafx.util.Duration;
 import main.Simon.java.Objects.Scenario;
 import main.Simon.java.Objects.Team;
 
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +74,7 @@ public class Main_abstract {
         fileQuit.setGraphic(new ImageView("file:src/main/Simon/resources/quit.png"));
         fileQuit.setOnAction(event -> {
             stage.hide();
+            //About.display();
         });
         file.getItems().add(fileQuit);
         Menu view = new Menu("View");
@@ -90,6 +93,20 @@ public class Main_abstract {
         view.getItems().add(viewGUI);
 
         Menu about = new Menu("About");
+        //MenuItem aboutDummy = new MenuItem();
+        //aboutDummy.setOnAction(event -> {
+        //    About.display();
+        //});
+        //about.getItems().add(aboutDummy);
+        //about.addEventHandler(Menu.ON_SHOWN, event -> About.display());
+        API.onAction(about);
+
+        /*about.showingProperty().addListener((observableValue,oldV,newV) -> {
+            if (newV)
+                about.getItems().get(0).fire();
+
+        });*/
+
         menuBar.getMenus().add(file);
         menuBar.getMenus().add(view);
         menuBar.getMenus().add(about);
