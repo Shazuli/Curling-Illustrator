@@ -4,6 +4,7 @@ package main.Simon.java;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -22,8 +23,6 @@ import static main.Simon.java.Main_abstract.getCurrentScenario;
 public class GUI {
 
     private List<Circle> tempMa = new ArrayList<>();
-
-    private boolean markerMode = false;
 
     public Pane newGUI() {
         Pane pane = new Pane();
@@ -59,6 +58,11 @@ public class GUI {
         newArrow.setTranslateX(10);
         newArrow.setTranslateY(140);
 
+
+
+
+
+
         newArrow.setOnMouseClicked(event -> {
             /*if (this.tempMa != null)
                 for (Circle i:this.tempMa)
@@ -80,7 +84,7 @@ public class GUI {
                         getCurrentScenario().getPane().getChildren().add(circle);
                     }
                     if (event.isSecondaryButtonDown()) {
-                        System.out.println("Writing ..");
+                        //System.out.println("Writing ..");
                         List<Double> cX = new ArrayList<>();
                         List<Double> cY = new ArrayList<>();
                         for (Circle i : tempMa) {

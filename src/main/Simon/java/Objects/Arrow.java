@@ -1,10 +1,7 @@
 package main.Simon.java.Objects;
 
-import com.sun.javafx.geom.Path2D;
 import javafx.event.EventHandler;
-import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
@@ -12,17 +9,14 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
-import main.Simon.java.Main;
-import main.Simon.java.Main_abstract;
 
 import static main.Simon.java.Main_abstract.getCurrentScenario;
 
 public class Arrow {
     private double[] x;
     private double[] y;
-    private double lenght = 20;
-    private double width = 3;
+    private double lenght = 8;
+    private double width = 1;
     private Canvas canvas;
     private Path arrow;
     private ContextMenu menu;

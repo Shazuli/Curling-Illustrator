@@ -13,7 +13,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import main.Simon.java.Objects.Arrow;
 import main.Simon.java.Objects.Scenario;
 import main.Simon.java.Objects.Team;
 
@@ -25,6 +24,7 @@ public class Main_abstract {
     private static List<Node> top = new ArrayList<>();
 
     private boolean GUIVisible = true;
+    private boolean ScoresVisible = true;
 
 
     public static List<Scenario> SCENARIOS = new ArrayList<>();
@@ -112,8 +112,8 @@ public class Main_abstract {
 
         Scenario newScenario = new Scenario();
 
-        Team teamRed = new Team("Team Red",Color.RED);
-        Team teamYellow = new Team("Team Yellow",Color.YELLOW);
+        Team teamRed = new Team("Team Engqvist",Color.RED);
+        Team teamYellow = new Team("Team Köhn",Color.YELLOW);
         newScenario.setTeam1(teamRed);
         newScenario.setTeam2(teamYellow);
 
