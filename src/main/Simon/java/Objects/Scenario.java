@@ -6,6 +6,8 @@ import main.Simon.java.Main;
 import java.util.ArrayList;
 import java.util.List;
 
+import static main.Simon.java.Main_abstract.getCurrentScenario;
+
 public class Scenario {
     private Team team1;
     private Team team2;
@@ -15,8 +17,10 @@ public class Scenario {
 
     public Scenario() {
         this.pane = new Pane();
+        //this.pane.setStyle("-fx-background-color: black");
         //this.pane.setPickOnBounds(false);
-        Main.layout.getChildren().add(this.pane);
+        //Main.layout.getChildren().add(this.pane);
+        Main.scenarioFrame.getChildren().add(this.pane);
         this.stones = new ArrayList<>();
     }
 
@@ -34,6 +38,10 @@ public class Scenario {
         stone.setColor(team.getColor());
         this.stones.add(stone);
         this.pane.getChildren().add(stone.draw(100,200));
+    }
+    public void removeStone(Stone stone) {
+        getCurrentScenario().getPane().getChildren().remove(stone.getStoneImage());
+        this.stones.remove(stone);
     }
     public void addArrow(Arrow arrow) {
         this.pane.getChildren().add(arrow.draw());

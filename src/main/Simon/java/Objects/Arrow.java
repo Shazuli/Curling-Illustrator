@@ -1,7 +1,6 @@
 package main.Simon.java.Objects;
 
 import javafx.event.EventHandler;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
@@ -17,7 +16,6 @@ public class Arrow {
     private double[] y;
     private double lenght = 8;
     private double width = 1;
-    private Canvas canvas;
     private Path arrow;
     private ContextMenu menu;
     private Color color = Color.BLACK;

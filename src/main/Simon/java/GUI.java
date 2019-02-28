@@ -35,7 +35,7 @@ public class GUI {
 
         newTeam1Stone.setOnMouseClicked(event -> {
             Stone stone = new Stone();
-            stone.setColor(Color.RED);
+            stone.setColor(getCurrentScenario().getTeam1().getColor());
             //Main.layout.getChildren().add(stone.draw(0,0));
             //Main_abstract.currentSCENARIO.getPane().getChildren().add(stone.draw(0,0));
             //Main_abstract.currentSCENARIO.addStone(Main_abstract.currentSCENARIO.getTeam1());
@@ -48,7 +48,7 @@ public class GUI {
 
         newTeam2Stone.setOnMouseClicked(event -> {
             Stone stone = new Stone();
-            stone.setColor(Color.YELLOW);
+            stone.setColor(getCurrentScenario().getTeam2().getColor());
             //Main.layout.getChildren().add(stone.draw(0,0));
             //Main_abstract.currentSCENARIO.addStone(Main_abstract.currentSCENARIO.getTeam2());
             getCurrentScenario().addStone(getCurrentScenario().getTeam2());

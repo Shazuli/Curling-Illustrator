@@ -2,6 +2,7 @@ package main.Simon.java;
 
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
+import main.Simon.java.Windows.About;
 
 public class API {
     public static void onAction(Menu menu)

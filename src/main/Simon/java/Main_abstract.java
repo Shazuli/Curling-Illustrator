@@ -1,6 +1,7 @@
 package main.Simon.java;
 
 import javafx.animation.FadeTransition;
+import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
@@ -9,15 +10,14 @@ import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import main.Simon.java.Objects.Scenario;
 import main.Simon.java.Objects.Team;
+import main.Simon.java.Windows.NewScenario;
 
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,12 +70,26 @@ public class Main_abstract {
         /*Menu Bar.*/
         MenuBar menuBar = new MenuBar();
         Menu file = new Menu("File");
-        MenuItem fileQuit = new Menu("Quit");
-        fileQuit.setGraphic(new ImageView("file:src/main/Simon/resources/quit.png"));
+        Menu fileNew = new Menu("New");
+        Menu fileNewScenario = new Menu("Scenario");
+        MenuItem fileNewScenarioBlank = new MenuItem("Blank");
+        fileNewScenarioBlank.setOnAction(event -> {
+            NewScenario.display();
+        });
+        MenuItem fileNewScenarioFile = new MenuItem("From File ..");
+        fileNewScenarioFile.setOnAction(event -> {
+
+        });
+        fileNewScenario.getItems().add(fileNewScenarioBlank);
+        fileNewScenario.getItems().add(fileNewScenarioFile);
+        fileNew.getItems().add(fileNewScenario);
+        MenuItem fileQuit = new MenuItem("Quit");
+        //fileQuit.setGraphic(new ImageView("file:src/main/Simon/resources/quit.png"));
         fileQuit.setOnAction(event -> {
             stage.hide();
             //About.display();
         });
+        file.getItems().add(fileNew);
         file.getItems().add(fileQuit);
         Menu view = new Menu("View");
         CheckMenuItem viewDist = new CheckMenuItem("Distance");
@@ -110,21 +124,27 @@ public class Main_abstract {
         menuBar.getMenus().add(file);
         menuBar.getMenus().add(view);
         menuBar.getMenus().add(about);
-        menuBar.setTranslateY(-Main.height*0.5+10);
+        //menuBar.setTranslateY(-Main.height*0.5+10);
         menuBar.setOpacity(0.3);
 
         menuBar.setOnMouseExited(event -> {
-            FadeTransition ft = new FadeTransition(Duration.millis(1000),menuBar);
+            FadeTransition ft = new FadeTransition(Duration.millis(800),menuBar);
             ft.setFromValue(1);
             ft.setToValue(0.3);
             ft.play();
         });
         menuBar.setOnMouseEntered(event -> {
+
             menuBar.setOpacity(1);
         });
 
         top.add(menuBar);
         Main.layout.getChildren().add(menuBar);
+        stage.heightProperty().addListener((obs, oldVal, newVal) -> {
+            menuBar.setTranslateY((-newVal.doubleValue()*0.5+25));
+        });
+
+        Main.layout.getChildren().add(Main.scenarioFrame);
 
 
         Scenario newScenario = new Scenario();

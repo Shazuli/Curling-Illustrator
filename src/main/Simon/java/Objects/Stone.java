@@ -30,6 +30,7 @@ public class Stone {
             //Main.layout.getChildren().remove(this.circle);
             //Main_abstract.currentSCENARIO.getPane().getChildren().remove(this.circle);
             getCurrentScenario().getPane().getChildren().remove(this.circle);
+            getCurrentScenario().removeStone(this);
         });
         this.menu.getItems().add(delete);
     }
@@ -41,7 +42,7 @@ public class Stone {
     public double getCenterX() { return this.circle.getCenterX(); }
     public double getCenterY() { return this.circle.getCenterY(); }
     public double getRadius() { return this.circle.getRadius(); }
-
+    public Circle getStoneImage() { return this.circle; }
 
     public Circle draw(double xOffset, double yOffset) {
         double radius = 30;

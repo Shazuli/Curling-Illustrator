@@ -1,10 +1,11 @@
-package main.Simon.java;
+package main.Simon.java.Windows;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import main.Simon.java.Main;
 
 public class About {
     public static void display() {
@@ -18,7 +19,7 @@ public class About {
 
         Label author = new Label("By Simon Engelholm");
         author.setTranslateY(-10);
-        Label version = new Label("Version: "+Main.version);
+        Label version = new Label("Version: "+ Main.version);
         version.setTranslateY(10);
 
         StackPane l = new StackPane();
