@@ -12,10 +12,11 @@ public class Main extends Application {
     public static final int width=900,height=800;
     public static final int minWidth=180, minHeight=160;
     public static final double yOffset = 120;
-    public static final String version = "0.4";
+    public static final String version = "0.5";
 
     public static StackPane layout;
     public static Pane scenarioFrame;
+    public static Stage mainStage;
 
     public static Canvas target;
 
@@ -32,6 +33,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        mainStage = primaryStage;
         layout = new StackPane();
         scenarioFrame = new Pane();
         //scenarioFrame.setPickOnBounds(false);

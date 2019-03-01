@@ -78,6 +78,8 @@ public class NewScenario {
                 }
                 Main.scenarioFrame.getChildren().remove(Main_abstract.getCurrentScenario().getPane());
                 Scenario newScenario = new Scenario();
+                newScenario.getPane().setMinSize(Main.mainStage.getWidth(),Main.mainStage.getHeight());
+                Main.scenarioFrame.setMinSize(Main.mainStage.getWidth(),Main.mainStage.getHeight());
                 newScenario.setTeam1(new Team(team1name.getText(),team1color.getValue()));
                 newScenario.setTeam2(new Team(team2name.getText(),team2color.getValue()));
                 //Main.scenarioFrame.getChildren().add(newScenario.getPane());

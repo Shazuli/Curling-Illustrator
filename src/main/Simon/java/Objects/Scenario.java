@@ -17,6 +17,13 @@ public class Scenario {
 
     public Scenario() {
         this.pane = new Pane();
+        //this.pane.setMinSize(1920,1080);
+        Main.mainStage.widthProperty().addListener((obs, oldVal, newVal) -> {
+            this.pane.setMinWidth(newVal.doubleValue());
+        });
+        Main.mainStage.heightProperty().addListener((obs, oldVal, newVal) -> {
+            this.pane.setMinHeight(newVal.doubleValue());
+        });
         //this.pane.setStyle("-fx-background-color: black");
         //this.pane.setPickOnBounds(false);
         //Main.layout.getChildren().add(this.pane);
