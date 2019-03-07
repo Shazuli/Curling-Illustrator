@@ -12,7 +12,7 @@ public class Main extends Application {
     public static final int width=900,height=800;
     public static final int minWidth=180, minHeight=160;
     public static final double yOffset = 120;
-    public static final String version = "0.5";
+    public static final String version = "0.6";
 
     public static StackPane layout;
     public static Pane scenarioFrame;

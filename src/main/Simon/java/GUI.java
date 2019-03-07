@@ -18,11 +18,13 @@ import main.Simon.java.Objects.Stone;
 import java.util.ArrayList;
 import java.util.List;
 
+import static main.Simon.java.Main_abstract.SCENARIOS;
 import static main.Simon.java.Main_abstract.getCurrentScenario;
 
 public class GUI {
 
     private List<Circle> tempMa = new ArrayList<>();
+    public static ComboBox comboBox;
 
     public Pane newGUI() {
         Pane pane = new Pane();
@@ -58,6 +60,11 @@ public class GUI {
         newArrow.setTranslateX(10);
         newArrow.setTranslateY(140);
 
+
+        comboBox = new ComboBox();
+
+        comboBox.setTranslateY(50);
+        addNode(pane,comboBox);
 
 
 
@@ -101,7 +108,8 @@ public class GUI {
                             getCurrentScenario().getPane().getChildren().remove(i);
                         if (tempMa.size() > 1) {
                             Arrow arrow = new Arrow(x, y);
-                            getCurrentScenario().getPane().getChildren().add(arrow.draw());
+                            //getCurrentScenario().getPane().getChildren().add(arrow.draw());
+                            getCurrentScenario().addArrow(arrow);
                         }
                         tempMa = new ArrayList<>();
                         //getCurrentScenario().getPane().removeEventHandler(MouseEvent.MOUSE_PRESSED,this);

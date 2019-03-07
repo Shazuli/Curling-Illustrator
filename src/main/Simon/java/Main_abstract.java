@@ -1,18 +1,18 @@
 package main.Simon.java;
 
 import javafx.animation.FadeTransition;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.util.Duration;
 import main.Simon.java.Objects.Scenario;
 import main.Simon.java.Objects.Team;
@@ -20,6 +20,8 @@ import main.Simon.java.Windows.NewScenario;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static main.Simon.java.GUI.comboBox;
 
 public class Main_abstract {
     //private static List<Node> viewList = new ArrayList<>();
@@ -30,7 +32,8 @@ public class Main_abstract {
 
 
     public static List<Scenario> SCENARIOS = new ArrayList<>();
-    public static int currentSCENARIOIndex = 0;
+    public static Scenario currentSCENARIO;
+    //public static int currentSCENARIOIndex = 0;
     private Pane GUI;
 
     public Main_abstract(Stage stage) {
@@ -147,6 +150,7 @@ public class Main_abstract {
         Main.layout.getChildren().add(Main.scenarioFrame);
 
 
+        /*Placeholder scenario*/
         Scenario newScenario = new Scenario();
 
         Team teamRed = new Team("Team Engqvist",Color.RED);
@@ -154,11 +158,23 @@ public class Main_abstract {
         newScenario.setTeam1(teamRed);
         newScenario.setTeam2(teamYellow);
 
-        //Arrow arrow = new Arrow(new double[]{0,-10,100,150},new double[]{20,-5,80,85});
-
-        //newScenario.addArrow(arrow);
-
+        newScenario.draw(true);
+        currentSCENARIO = newScenario;
         SCENARIOS.add(newScenario);
+
+        for (Scenario i:SCENARIOS)
+            comboBox.getItems().add(i);
+        comboBox.valueProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                //System.out.println(((Scenario) newValue).getTeam1().getName());
+                Main.scenarioFrame.getChildren().remove(currentSCENARIO.getPane());
+                currentSCENARIO = (Scenario) newValue;
+                Main.scenarioFrame.getChildren().add(currentSCENARIO.getPane());
+            }
+        });
+        comboBox.getSelectionModel().selectFirst();
+
 
         //viewList.add(gui);
 
@@ -195,5 +211,7 @@ public class Main_abstract {
         for (Node i:top)
             i.toFront();
     }
-    public static Scenario getCurrentScenario() { return SCENARIOS.get(currentSCENARIOIndex); }
+    public static Scenario getCurrentScenario() { return /*SCENARIOS.get(currentSCENARIOIndex);*/currentSCENARIO; }
+
+    public void addScenario(Scenario scenario) { SCENARIOS.add(scenario); }
 }

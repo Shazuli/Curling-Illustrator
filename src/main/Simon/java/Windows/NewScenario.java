@@ -16,6 +16,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import main.Simon.java.GUI;
 import main.Simon.java.Main;
 import main.Simon.java.Main_abstract;
 import main.Simon.java.Objects.Scenario;
@@ -83,9 +84,15 @@ public class NewScenario {
                 newScenario.setTeam1(new Team(team1name.getText(),team1color.getValue()));
                 newScenario.setTeam2(new Team(team2name.getText(),team2color.getValue()));
                 //Main.scenarioFrame.getChildren().add(newScenario.getPane());
+                Main_abstract.currentSCENARIO.draw(false);
+                newScenario.draw(true);
+                Main_abstract.currentSCENARIO = newScenario;
                 Main_abstract.SCENARIOS.add(newScenario);
+                GUI.comboBox.getItems().add(newScenario);
+                GUI.comboBox.getSelectionModel().select(newScenario);
+
                 //Main_abstract.currentSCENARIOIndex = Main_abstract.SCENARIOS.size()-1;
-                Main_abstract.currentSCENARIOIndex = Main_abstract.SCENARIOS.indexOf(newScenario);
+                //Main_abstract.currentSCENARIOIndex = Main_abstract.SCENARIOS.indexOf(newScenario);
 
 
                 window.hide();
