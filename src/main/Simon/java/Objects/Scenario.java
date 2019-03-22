@@ -40,6 +40,7 @@ public class Scenario {
     public Team getTeam2() { return this.team2; }
     public int getEnd() { return this.end; }
     public Pane getPane() { return this.pane; }
+    public Stone[] getStones() { return this.stones.toArray(new Stone[this.stones.size()]); }
     public String toString() { return team1.getName()+" - "+team2.getName(); }
 
     public void addStone(Team team) {

@@ -1,7 +1,6 @@
 package main.Simon.java.Objects;
 
 import javafx.event.EventHandler;
-import javafx.scene.Cursor;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseDragEvent;
@@ -9,7 +8,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
-import main.Simon.java.Main;
 import main.Simon.java.Main_abstract;
 
 import static main.Simon.java.Main_abstract.getCurrentScenario;
@@ -20,6 +18,8 @@ public class Stone {
     private int number;
     private Circle circle;
     private Line line;
+    private double oldX;
+    private double oldY;
     //private Canvas canvas;
     private ContextMenu menu;
     public Stone() {
@@ -63,8 +63,10 @@ public class Stone {
             @Override
             public void handle(MouseEvent event) {
                 if (event.isPrimaryButtonDown()) {
+                    oldX = circle.getTranslateX();
+                    oldY = circle.getTranslateY();
                     //circle.setMouseTransparent(true);
-                    Main.layout.setCursor(Cursor.NONE);
+                    //Main.layout.setCursor(Cursor.NONE);
                     event.setDragDetect(true);
                     //System.out.println("Pressed");
                     circle.setOpacity(0.7);
@@ -80,9 +82,63 @@ public class Stone {
             @Override
             public void handle(MouseEvent event) {
                 //circle.setMouseTransparent(false);
-                Main.layout.setCursor(Cursor.DEFAULT);
+                //Main.layout.setCursor(Cursor.DEFAULT);
                 event.setDragDetect(false);
                 circle.setOpacity(1);
+
+                double newX = circle.getTranslateX();
+                double newY = circle.getTranslateY();
+
+
+                for (Stone stn:getCurrentScenario().getStones()) {
+                    if (stn.circle == circle) continue;
+
+                    double x1 = stn.circle.getTranslateX();
+                    double y1 = stn.circle.getTranslateY();
+                    double r1 = stn.circle.getRadius()+stn.circle.getStrokeWidth();
+
+                    double x2 = newX;
+                    double y2 = newY;
+                    double r2 = circle.getRadius();
+
+                    double distSq = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
+                    double radSumSq = (r1 + r2) * (r1 + r2);
+
+
+                    //System.out.println(((y1-y2)/(x2-x1))+"X");
+                    if (!(distSq != radSumSq && distSq > radSumSq)) {
+                        double angle = Math.atan2(x1-x2,y1-y2);
+                        newX = x1 - Math.sin(angle) * (circle.getRadius() + circle.getStrokeWidth() + stn.circle.getRadius() + .01);
+                        newY = y1 - Math.cos(angle) * (circle.getRadius() + circle.getStrokeWidth() + stn.circle.getRadius() + .01);
+                        //circle.setTranslateX(newX);
+                        //circle.setTranslateY(newY);
+
+
+
+                    }
+                }
+                for (Stone stn:getCurrentScenario().getStones()) {
+                    if (stn.circle == circle) continue;
+                    double x1 = stn.circle.getTranslateX();
+                    double y1 = stn.circle.getTranslateY();
+                    double r1 = stn.circle.getRadius()+stn.circle.getStrokeWidth();
+
+                    double x2 = newX;
+                    double y2 = newY;
+                    double r2 = circle.getRadius();
+
+                    double distSq = (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2);
+                    double radSumSq = (r1 + r2) * (r1 + r2);
+
+                    if (!(distSq != radSumSq && distSq > radSumSq)) {
+                        newX = oldX;
+                        newY = oldY;
+                        break;
+                    }
+                }
+
+                circle.setTranslateX(newX);
+                circle.setTranslateY(newY);
 
                 //System.out.println("Released");
             }

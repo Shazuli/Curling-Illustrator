@@ -1,10 +1,9 @@
 package main.Simon.java;
 
+import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.Event;
-import javafx.event.EventType;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Callback;
 import javafx.util.Duration;
 import main.Simon.java.Objects.Scenario;
 import main.Simon.java.Objects.Team;
@@ -26,6 +24,7 @@ import static main.Simon.java.GUI.comboBox;
 public class Main_abstract {
     //private static List<Node> viewList = new ArrayList<>();
     private static List<Node> top = new ArrayList<>();
+    private FadeTransition ft;
 
     private boolean GUIVisible = true;
     private boolean ScoresVisible = true;
@@ -129,14 +128,17 @@ public class Main_abstract {
         menuBar.getMenus().add(about);
         //menuBar.setTranslateY(-Main.height*0.5+10);
         menuBar.setOpacity(0.3);
+        ft = new FadeTransition();
 
         menuBar.setOnMouseExited(event -> {
-            FadeTransition ft = new FadeTransition(Duration.millis(800),menuBar);
+            ft = new FadeTransition(Duration.millis(800),menuBar);
             ft.setFromValue(1);
             ft.setToValue(0.3);
             ft.play();
         });
         menuBar.setOnMouseEntered(event -> {
+            if (ft.getStatus().equals(FadeTransition.Status.RUNNING))
+                ft.stop();
 
             menuBar.setOpacity(1);
         });
