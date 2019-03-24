@@ -1,6 +1,5 @@
 package main.Simon.java;
 
-import javafx.animation.Animation;
 import javafx.animation.FadeTransition;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -13,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import main.Simon.java.Objects.Scenario;
+import main.Simon.java.Objects.Scoreboard;
 import main.Simon.java.Objects.Team;
 import main.Simon.java.Windows.NewScenario;
 
@@ -34,6 +34,7 @@ public class Main_abstract {
     public static Scenario currentSCENARIO;
     //public static int currentSCENARIOIndex = 0;
     private Pane GUI;
+    private Pane SCOREBOARD;
 
     public Main_abstract(Stage stage) {
         /*Target canvas.*/
@@ -57,17 +58,37 @@ public class Main_abstract {
 
 
 
+        /*Placeholder scenario*/
+        Scenario newScenario = new Scenario();
+
+        Team teamRed = new Team("Team Engqvist",Color.RED);
+        Team teamYellow = new Team("Team Köhn",Color.YELLOW);
+        newScenario.setTeam1(teamRed);
+        newScenario.setTeam2(teamYellow);
+
+        newScenario.draw(true);
+        currentSCENARIO = newScenario;
+        SCENARIOS.add(newScenario);
 
         //Main.layout.getChildren().add(pane);
 
+
+
+        SCOREBOARD = Scoreboard.newScoreboard(newScenario);
+        SCOREBOARD.setVisible(ScoresVisible);
+        top.add(SCOREBOARD);
+        Main.layout.getChildren().add(SCOREBOARD);
+
+        //GUI.setStyle("-fx-background-color: black;");
         /*GUI*/
-        GUI = new GUI().newGUI();
+        GUI = main.Simon.java.GUI.newGUI();
         GUI.setVisible(GUIVisible);
         top.add(GUI);
-        //GUI.setStyle("-fx-background-color: black;");
+        Main.layout.getChildren().add(GUI);
+
 
         //viewList.add(GUI);
-        Main.layout.getChildren().add(GUI);
+
 
         /*Menu Bar.*/
         MenuBar menuBar = new MenuBar();
@@ -104,6 +125,13 @@ public class Main_abstract {
         viewGUI.setOnAction(event -> {
             GUIVisible = !GUIVisible;
             GUI.setVisible(GUIVisible);
+        });
+        CheckMenuItem viewScoreboard = new CheckMenuItem("Scoreboard");
+        viewScoreboard.setSelected(ScoresVisible);
+        view.getItems().add(viewScoreboard);
+        viewScoreboard.setOnAction(event -> {
+            ScoresVisible = !ScoresVisible;
+            SCOREBOARD.setVisible(ScoresVisible);
         });
         viewGUI.setSelected(GUIVisible);
         view.getItems().add(viewGUI);
@@ -152,17 +180,7 @@ public class Main_abstract {
         Main.layout.getChildren().add(Main.scenarioFrame);
 
 
-        /*Placeholder scenario*/
-        Scenario newScenario = new Scenario();
 
-        Team teamRed = new Team("Team Engqvist",Color.RED);
-        Team teamYellow = new Team("Team Köhn",Color.YELLOW);
-        newScenario.setTeam1(teamRed);
-        newScenario.setTeam2(teamYellow);
-
-        newScenario.draw(true);
-        currentSCENARIO = newScenario;
-        SCENARIOS.add(newScenario);
 
         for (Scenario i:SCENARIOS)
             comboBox.getItems().add(i);
@@ -173,6 +191,7 @@ public class Main_abstract {
                 Main.scenarioFrame.getChildren().remove(currentSCENARIO.getPane());
                 currentSCENARIO = (Scenario) newValue;
                 Main.scenarioFrame.getChildren().add(currentSCENARIO.getPane());
+                Scoreboard.update();
             }
         });
         comboBox.getSelectionModel().selectFirst();

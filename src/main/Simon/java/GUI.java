@@ -5,43 +5,57 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import main.Simon.java.Objects.Arrow;
-import main.Simon.java.Objects.Scenario;
-import main.Simon.java.Objects.Stone;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static main.Simon.java.Main_abstract.SCENARIOS;
 import static main.Simon.java.Main_abstract.getCurrentScenario;
 
 public class GUI {
 
-    private List<Circle> tempMa = new ArrayList<>();
+    private static List<Circle> tempMa = new ArrayList<>();
     public static ComboBox comboBox;
 
-    public Pane newGUI() {
+    public static Pane newGUI() {
         Pane pane = new Pane();
 
         pane.setPickOnBounds(false);
 
+        /* newScoreboard */
+        //Base
+        /*Rectangle scoreBrdBase = new Rectangle(600,110,Color.GRAY);
+        scoreBrdBase.setTranslateX(150);
+        scoreBrdBase.setTranslateY(35);
+         //Team1 Board
+        team1B = new Rectangle(280,50,getCurrentScenario().getTeam1().getColor());
+        team1B.setTranslateX(150+5);
+        team1B.setTranslateY(35+10);
+        //Team2 Board
+        team2B = new Rectangle(280,50,getCurrentScenario().getTeam2().getColor());
+        team2B.setTranslateX(150+600-280-5);
+        team2B.setTranslateY(35+10);
+        //Team1 Text
+        team1T = new Text(getCurrentScenario().getTeam1().getName());
+        team1T.setFont(new Font(28));
+        team1T.setTranslateX(150+5+2);
+        team1T.setTranslateY(35+10+32);
+        //Team2 Text
+        team2T = new Text(getCurrentScenario().getTeam2().getName());
+        team2T.setFont(new Font(28));
+        team2T.setTranslateX(150+600-280-5+2);
+        team2T.setTranslateY(35+10+32);*/
         Button newTeam1Stone = new Button("New Red");
         newTeam1Stone.setTranslateX(10);
         newTeam1Stone.setTranslateY(80);
 
         newTeam1Stone.setOnMouseClicked(event -> {
-            Stone stone = new Stone();
-            stone.setColor(getCurrentScenario().getTeam1().getColor());
-            //Main.layout.getChildren().add(stone.draw(0,0));
-            //Main_abstract.currentSCENARIO.getPane().getChildren().add(stone.draw(0,0));
-            //Main_abstract.currentSCENARIO.addStone(Main_abstract.currentSCENARIO.getTeam1());
             getCurrentScenario().addStone(getCurrentScenario().getTeam1());
+            System.out.println("New "+getCurrentScenario().getTeam1().getName()+" stone.");
         });
 
         Button newTeam2Stone = new Button("New Yellow");
@@ -49,33 +63,42 @@ public class GUI {
         newTeam2Stone.setTranslateY(110);
 
         newTeam2Stone.setOnMouseClicked(event -> {
-            Stone stone = new Stone();
-            stone.setColor(getCurrentScenario().getTeam2().getColor());
-            //Main.layout.getChildren().add(stone.draw(0,0));
-            //Main_abstract.currentSCENARIO.addStone(Main_abstract.currentSCENARIO.getTeam2());
             getCurrentScenario().addStone(getCurrentScenario().getTeam2());
+            System.out.println("New "+getCurrentScenario().getTeam2().getName()+" stone.");
         });
 
         Button newArrow = new Button("Add Arrow");
         newArrow.setTranslateX(10);
         newArrow.setTranslateY(140);
+        addArrow(newArrow);
 
 
         comboBox = new ComboBox();
 
-        comboBox.setTranslateY(50);
-        addNode(pane,comboBox);
+        comboBox.setTranslateY(170);
+        //addNode(pane,comboBox);
 
 
 
 
 
-        newArrow.setOnMouseClicked(event -> {
-            /*if (this.tempMa != null)
-                for (Circle i:this.tempMa)
-                    getCurrentScenario().getPane().getChildren().remove(i);*/
-            //this.tempMa = new ArrayList<>();
-            //this.markerMode = true;
+        //addArrow(newArrow);
+
+        //addNode(pane,newTeam1Stone);
+        //addNode(pane,newTeam2Stone);
+        //addNode(pane,newArrow);
+        //pane.getChildren().addAll(scoreBrdBase,team1B,team2B,team1T,team2T);
+        pane.getChildren().addAll(newTeam1Stone,newTeam2Stone,newArrow,comboBox);
+
+        return pane;
+    }
+
+    private void addNode(Pane pane,Node node) {
+        pane.getChildren().add(node);
+    }
+
+    private static void addArrow(Node node) {
+        node.setOnMouseClicked(event -> {
             getCurrentScenario().getPane().setOnMousePressed(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
@@ -91,7 +114,6 @@ public class GUI {
                         getCurrentScenario().getPane().getChildren().add(circle);
                     }
                     if (event.isSecondaryButtonDown()) {
-                        //System.out.println("Writing ..");
                         List<Double> cX = new ArrayList<>();
                         List<Double> cY = new ArrayList<>();
                         for (Circle i : tempMa) {
@@ -107,41 +129,17 @@ public class GUI {
                         for (Circle i : tempMa)
                             getCurrentScenario().getPane().getChildren().remove(i);
                         if (tempMa.size() > 1) {
-                            Arrow arrow = new Arrow(x, y);
-                            //getCurrentScenario().getPane().getChildren().add(arrow.draw());
+                            Arrow arrow = new Arrow(x,y);
                             getCurrentScenario().addArrow(arrow);
                         }
                         tempMa = new ArrayList<>();
-                        //getCurrentScenario().getPane().removeEventHandler(MouseEvent.MOUSE_PRESSED,this);
                         getCurrentScenario().getPane().setOnMousePressed(null);
 
                     }
 
                 }
             });
-
-
-            /*pane.setOnKeyPressed(new EventHandler<KeyEvent>() {
-                @Override
-                public void handle(KeyEvent event) {
-                    if (event.getCode() == KeyCode.ENTER) {
-                        System.out.println("Writing ..");
-
-                        pane.removeEventHandler(KeyEvent.KEY_PRESSED,this::handle);
-                    }
-                }
-            });*/
-
         });
 
-        addNode(pane,newTeam1Stone);
-        addNode(pane,newTeam2Stone);
-        addNode(pane,newArrow);
-
-        return pane;
-    }
-    //private Scenario getCurrentScenario() { return Main_abstract.SCENARIOS.get(Main_abstract.currentSCENARIOIndex); }
-    private void addNode(Pane pane,Node node) {
-        pane.getChildren().add(node);
     }
 }
