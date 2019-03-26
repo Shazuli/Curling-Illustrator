@@ -10,6 +10,7 @@ public class Team {
     private String name;
     private Color color;
     private int points;
+    private int number = 1;
     //private List<List<Stone>> scenarios;
 
     public Team(String name, Color color) {
@@ -20,9 +21,12 @@ public class Team {
 
     public void setName(String name) { this.name = name; }
     public void setColor(Color color) { this.color = color; }
+    public void setNumber(int number) { this.number = number; }
+    public void addNumber(int number) { this.number = this.number + number; }
 
     public String getName() { return this.name; }
     public Color getColor() { return this.color; }
+    public int getNumber() { return this.number; }
 
     /*public void addStone(Stone stone) {
         //this.scenarios.set(Main.scenarioIndex,stone);

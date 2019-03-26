@@ -48,6 +48,9 @@ public class Scenario {
         stone.setColor(team.getColor());
         this.stones.add(stone);
         this.pane.getChildren().add(stone.draw(100,200));
+        stone.setNumber(team.getNumber());
+        team.addNumber(1);
+        this.pane.getChildren().add(stone.getLabel());
     }
     public void removeStone(Stone stone) {
         getCurrentScenario().getPane().getChildren().remove(stone.getStoneImage());

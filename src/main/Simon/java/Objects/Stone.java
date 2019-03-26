@@ -1,13 +1,20 @@
 package main.Simon.java.Objects;
 
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseDragEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+import main.Simon.java.Main;
 import main.Simon.java.Main_abstract;
 
 import static main.Simon.java.Main_abstract.getCurrentScenario;
@@ -16,6 +23,7 @@ public class Stone {
     private Color color;
     private String team;
     private int number;
+    private Text label;
     private Circle circle;
     private Line line;
     private double oldX;
@@ -30,12 +38,47 @@ public class Stone {
             //Main.layout.getChildren().remove(this.circle);
             //Main_abstract.currentSCENARIO.getPane().getChildren().remove(this.circle);
             getCurrentScenario().getPane().getChildren().remove(this.circle);
+            getCurrentScenario().getPane().getChildren().remove(this.label);
             getCurrentScenario().removeStone(this);
         });
-        this.menu.getItems().add(delete);
+        MenuItem changeNumber = new MenuItem("Number");
+        changeNumber.setOnAction(event -> {
+            TextField textField = new TextField(String.valueOf(number));
+            textField.setOnKeyPressed(new EventHandler<KeyEvent>() {
+                @Override
+                public void handle(KeyEvent event) {
+                    if (event.getCode().equals(KeyCode.ENTER)) {
+                        try {
+                            setNumber(Integer.parseInt(textField.getText()));
+                        } catch (NumberFormatException err) {
+                            System.out.println(err);
+                        }
+                        Main.layout.getChildren().remove(textField);
+                    } else if (event.getCode().equals(KeyCode.ESCAPE)) {
+                        Main.layout.getChildren().remove(textField);
+                    }
+                }
+            });
+            /*textField.onKeyPressedProperty().addListener((observableValue,oldV,newV) -> {
+                System.out.println("fff");
+                if (newV.equals(KeyCode.ENTER)) {
+                    setNumber(Integer.parseInt(textField.getText()));
+                    Main.layout.getChildren().remove(textField);
+                }
+            });*/
+
+
+            textField.setMaxWidth(120);
+
+            Main.layout.getChildren().add(textField);
+            textField.requestFocus();
+            textField.selectAll();
+        });
+        this.menu.getItems().addAll(delete,changeNumber);
     }
     public void setColor(Color color) { this.color = color; }
     public void setTeam(String team) { this.team = team; }
+    public void setNumber(int number) { this.number=number;this.label.setText(String.valueOf(number)); }
 
     public Color getColor() { return this.color; }
     public String getTeam(){ return this.team; }
@@ -43,6 +86,7 @@ public class Stone {
     public double getCenterY() { return this.circle.getCenterY(); }
     public double getRadius() { return this.circle.getRadius(); }
     public Circle getStoneImage() { return this.circle; }
+    public Text getLabel() { return this.label; }
 
     public Circle draw(double xOffset, double yOffset) {
         double radius = 30;
@@ -58,6 +102,24 @@ public class Stone {
         circle.toFront();
         this.circle = circle;
 
+        Text text = new Text(String.valueOf(this.number));
+        text.setFont(new Font(15));
+        text.setTranslateX(xOffset-circle.getRadius()*0.25+2.5);
+        text.setTranslateY(yOffset-6);
+        text.setPickOnBounds(false);
+        text.toFront();
+
+
+
+
+        this.label = text;
+
+        circle.translateXProperty().addListener((observableValue,oldV,newV) -> {
+            this.label.setTranslateX(newV.doubleValue()-circle.getRadius()*0.25+2.5);
+        });
+        circle.translateYProperty().addListener((observableValue,oldV,newV) -> {
+            this.label.setTranslateY(newV.doubleValue()-6);
+        });
 
         circle.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -71,6 +133,10 @@ public class Stone {
                     //System.out.println("Pressed");
                     circle.setOpacity(0.7);
                     circle.toFront();
+
+                    label.setOpacity(0.7);
+                    label.toFront();
+
                     Main_abstract.updateDepth();
                 }
                 if (event.isSecondaryButtonDown()) {
@@ -85,6 +151,7 @@ public class Stone {
                 //Main.layout.setCursor(Cursor.DEFAULT);
                 event.setDragDetect(false);
                 circle.setOpacity(1);
+                label.setOpacity(1);
 
                 double newX = circle.getTranslateX();
                 double newY = circle.getTranslateY();
@@ -139,7 +206,8 @@ public class Stone {
 
                 circle.setTranslateX(newX);
                 circle.setTranslateY(newY);
-
+                //label.setTranslateX(newX);
+                //label.setTranslateY(newY);
                 //System.out.println("Released");
             }
         });
@@ -150,6 +218,8 @@ public class Stone {
                     event.setDragDetect(false);
                     circle.setTranslateX(circle.getTranslateX() + event.getX());
                     circle.setTranslateY(circle.getTranslateY() + event.getY());
+                    //label.setTranslateX(circle.getTranslateX() + event.getX());
+                    //label.setTranslateY(circle.getTranslateY() + event.getY());
                 }
 
             }
