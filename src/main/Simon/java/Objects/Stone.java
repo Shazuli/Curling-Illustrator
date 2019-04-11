@@ -215,11 +215,11 @@ public class Stone {
             @Override
             public void handle(MouseEvent event) {
                 if (event.isPrimaryButtonDown()) {
-                    event.setDragDetect(false);
-                    circle.setTranslateX(circle.getTranslateX() + event.getX());
-                    circle.setTranslateY(circle.getTranslateY() + event.getY());
-                    //label.setTranslateX(circle.getTranslateX() + event.getX());
-                    //label.setTranslateY(circle.getTranslateY() + event.getY());
+                    if (event.getSceneX() >= 0 && event.getSceneX() <= Main.mainStage.getWidth() && event.getSceneY() >= 0 && event.getSceneY() <= Main.mainStage.getHeight()) {
+                        event.setDragDetect(false);
+                        circle.setTranslateX(circle.getTranslateX() + event.getX());
+                        circle.setTranslateY(circle.getTranslateY() + event.getY());
+                    }
                 }
 
             }

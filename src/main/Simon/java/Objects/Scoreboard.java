@@ -15,6 +15,7 @@ public class Scoreboard {
     public static Pane newScoreboard(Scenario scenario) {
         Pane pane = new Pane();
         pane.setPickOnBounds(false);
+        pane.setMouseTransparent(true);
 
         //Base
         Rectangle scoreBrdBase = new Rectangle(600,110, Color.GRAY);

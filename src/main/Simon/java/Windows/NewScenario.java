@@ -24,9 +24,14 @@ import main.Simon.java.Objects.Scenario;
 import main.Simon.java.Objects.Scoreboard;
 import main.Simon.java.Objects.Team;
 
+import java.awt.*;
+import java.awt.font.FontRenderContext;
+import java.awt.geom.AffineTransform;
+import java.util.function.Function;
+
 public class NewScenario {
     private static Stage window;
-    private static final int maxLenght = 13;
+    private static final int maxLenght = 128;
     public static void display() {
         window = new Stage();
         window.initModality(Modality.APPLICATION_MODAL);
@@ -72,41 +77,9 @@ public class NewScenario {
         done.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                /*Check verifications*/
-                if (team1name.getText().equals(team2name.getText())) {
-                    showWarning("Can't be same name",notice);
-                    return;
-                }
-                if (team1color.getValue().equals(team2color.getValue())) {
-                    showWarning("Can't be same color",notice);
-                    return;
-                }
-                if (team1name.getText().length() > maxLenght || team2name.getText().length() > maxLenght) {
-                    showWarning(String.format("Can't be longer than %s characters",maxLenght),notice);
-                    return;
-                }
-                Main.scenarioFrame.getChildren().remove(Main_abstract.getCurrentScenario().getPane());
-                Scenario newScenario = new Scenario();
-                newScenario.getPane().setMinSize(Main.mainStage.getWidth(),Main.mainStage.getHeight());
-                Main.scenarioFrame.setMinSize(Main.mainStage.getWidth(),Main.mainStage.getHeight());
-                newScenario.setTeam1(new Team(team1name.getText(),team1color.getValue()));
-                newScenario.setTeam2(new Team(team2name.getText(),team2color.getValue()));
-                //Main.scenarioFrame.getChildren().add(newScenario.getPane());
-                Main_abstract.currentSCENARIO.draw(false);
-                newScenario.draw(true);
-                Main_abstract.currentSCENARIO = newScenario;
-                Main_abstract.SCENARIOS.add(newScenario);
-                GUI.comboBox.getItems().add(newScenario);
-                GUI.comboBox.getSelectionModel().select(newScenario);
-
-                Scoreboard.update();
-
-                //Main_abstract.currentSCENARIOIndex = Main_abstract.SCENARIOS.size()-1;
-                //Main_abstract.currentSCENARIOIndex = Main_abstract.SCENARIOS.indexOf(newScenario);
-
-                Scoreboard.update();
-                window.hide();
+                apply(team1name,team2name,team1color,team2color,notice);
             }
+
         });
 
         StackPane stackPane = new StackPane();
@@ -117,40 +90,8 @@ public class NewScenario {
             @Override
             public void handle(KeyEvent event) {
                 if (event.getCode() == KeyCode.ENTER) {
-                    // TODO Remove copy paste.
-                    /*Check verifications*/
-                    if (team1name.getText().equals(team2name.getText())) {
-                        showWarning("Can't be same name",notice);
-                        return;
-                    }
-                    if (team1color.getValue().equals(team2color.getValue())) {
-                        showWarning("Can't be same color",notice);
-                        return;
-                    }
-                    if (team1name.getText().length() > maxLenght || team2name.getText().length() > maxLenght) {
-                        showWarning(String.format("Can't be longer than %s characters",maxLenght),notice);
-                        return;
-                    }
-                    Main.scenarioFrame.getChildren().remove(Main_abstract.getCurrentScenario().getPane());
-                    Scenario newScenario = new Scenario();
-                    newScenario.getPane().setMinSize(Main.mainStage.getWidth(),Main.mainStage.getHeight());
-                    Main.scenarioFrame.setMinSize(Main.mainStage.getWidth(),Main.mainStage.getHeight());
-                    newScenario.setTeam1(new Team(team1name.getText(),team1color.getValue()));
-                    newScenario.setTeam2(new Team(team2name.getText(),team2color.getValue()));
-                    //Main.scenarioFrame.getChildren().add(newScenario.getPane());
-                    Main_abstract.currentSCENARIO.draw(false);
-                    newScenario.draw(true);
-                    Main_abstract.currentSCENARIO = newScenario;
-                    Main_abstract.SCENARIOS.add(newScenario);
-                    GUI.comboBox.getItems().add(newScenario);
-                    GUI.comboBox.getSelectionModel().select(newScenario);
-
-                    Scoreboard.update();
-
-                    //Main_abstract.currentSCENARIOIndex = Main_abstract.SCENARIOS.size()-1;
-                    //Main_abstract.currentSCENARIOIndex = Main_abstract.SCENARIOS.indexOf(newScenario);
-
-
+                    apply(team1name,team2name,team1color,team2color,notice);
+                } else if (event.getCode() == KeyCode.ESCAPE) {
                     window.hide();
                 }
             }
@@ -162,6 +103,49 @@ public class NewScenario {
         window.showAndWait();
 
     }
+    private static void apply(TextField team1name,TextField team2name, ColorPicker team1color,ColorPicker team2color,Text notice) {
+        /*Check verifications*/
+        if (team1name.getText().equals(team2name.getText())) {
+            showWarning("Can't be same name",notice);
+            return;
+        }
+        if (team1color.getValue().equals(team2color.getValue())) {
+            showWarning("Can't be same color",notice);
+            return;
+        }
+        FontRenderContext frc = new FontRenderContext(new AffineTransform(),true,true);
+        Font font = new Font(team1name.getFont().getName(),Font.PLAIN, ((int) team1name.getFont().getSize()));
+        double nameW1 = font.getStringBounds(team1name.getText(),frc).getWidth();
+        double nameW2 = font.getStringBounds(team2name.getText(),frc).getWidth();
+        if (nameW1 > maxLenght || nameW2 > maxLenght) {
+            showWarning(String.format("Can't be longer than %s/%s metrics",Math.round(Double.max(nameW1,nameW2)),maxLenght),notice);
+            return;
+        }
+
+
+        Main.scenarioFrame.getChildren().remove(Main_abstract.getCurrentScenario().getPane());
+        Scenario newScenario = new Scenario();
+        newScenario.getPane().setMinSize(Main.mainStage.getWidth(),Main.mainStage.getHeight());
+        Main.scenarioFrame.setMinSize(Main.mainStage.getWidth(),Main.mainStage.getHeight());
+        newScenario.setTeam1(new Team(team1name.getText(),team1color.getValue()));
+        newScenario.setTeam2(new Team(team2name.getText(),team2color.getValue()));
+        //Main.scenarioFrame.getChildren().add(newScenario.getPane());
+        Main_abstract.currentSCENARIO.draw(false);
+        newScenario.draw(true);
+        Main_abstract.currentSCENARIO = newScenario;
+        Main_abstract.SCENARIOS.add(newScenario);
+        GUI.comboBox.getItems().add(newScenario);
+        GUI.comboBox.getSelectionModel().select(newScenario);
+
+        Scoreboard.update();
+
+        //Main_abstract.currentSCENARIOIndex = Main_abstract.SCENARIOS.size()-1;
+        //Main_abstract.currentSCENARIOIndex = Main_abstract.SCENARIOS.indexOf(newScenario);
+
+        Scoreboard.update();
+        window.hide();
+    }
+
     private static void showWarning(String msg,Text target) {
         target.setText(msg);
         FadeTransition fd = new FadeTransition(Duration.millis(2500),target);
